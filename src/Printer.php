@@ -6,7 +6,6 @@ use PHPUnit_Extensions_PhptTestCase;
 use PHPUnit_Framework_AssertionFailedError;
 use PHPUnit_Framework_Test;
 use PHPUnit_Framework_TestCase;
-use PHPUnit_Framework_TestSuite;
 use PHPUnit_TextUI_ResultPrinter;
 use PHPUnit_Util_Test;
 
@@ -39,19 +38,9 @@ class Printer extends PHPUnit_TextUI_ResultPrinter
             $progress = static::$symbols[$progress];
         }
 
-        return parent::writeProgress(sprintf('%s %s', $progress, $this->testRow));
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function startTestSuite(PHPUnit_Framework_TestSuite $suite)
-    {
-        if ($this->numTests == -1) {
-            $this->numTests = count($suite);
-            $this->numTestsWidth = strlen((string) $this->numTests);
-            $this->maxColumn = 0;
-        }
+        $this->write(sprintf('%s %s', $progress, $this->testRow));
+        $this->column++;
+        $this->numTestsRun++;
     }
 
     /**
