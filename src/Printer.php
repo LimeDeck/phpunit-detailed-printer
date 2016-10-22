@@ -73,7 +73,6 @@ class Printer extends PHPUnit_TextUI_ResultPrinter
 
         if (!$this->lastTestFailed) {
             $this->writeProgress('.');
-            $this->lastTestFailed = false;
         }
 
         if ($test instanceof PHPUnit_Framework_TestCase) {
@@ -81,6 +80,8 @@ class Printer extends PHPUnit_TextUI_ResultPrinter
         } elseif ($test instanceof PHPUnit_Extensions_PhptTestCase) {
             $this->numAssertions++;
         }
+        
+        $this->lastTestFailed = false;
 
         if ($test instanceof PHPUnit_Framework_TestCase) {
             if (method_exists($this, 'hasExpectationOnOutput') && !$test->hasExpectationOnOutput()) {
