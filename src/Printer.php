@@ -110,7 +110,7 @@ class Printer extends PHPUnit_TextUI_ResultPrinter
         $this->testRow = sprintf(
             "%s: %s (%s ms)\n",
             $className,
-            ucfirst(str_replace('_', ' ', $methodName)),
+            preg_replace('/(?<=\\w)(?=[A-Z])/', ' $1', ucfirst(str_replace('_', ' ', $methodName))),
             $testDuration > 500 ? "\e[33m{$testDuration}\e[0m" : $testDuration
         );
     }
