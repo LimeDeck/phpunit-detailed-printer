@@ -29,4 +29,4 @@ To run the test suite, use `phpunit` command.
 
 ## License
 
-Detailed PHPUnit Printer is open-sourced software licensed under the ISC license. If you'd like to read the license agreement, click [here](LICENSE).
+Detailed PHPUnit Printer is open-sourced software licensed under the ISC license. If you'd like to read the license agreement, click [here](LICENSE.md).

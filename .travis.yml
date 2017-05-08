@@ -9,4 +9,9 @@ install:
     - composer install
 
 script:
-    - php bin/phpunit
+    - php ./vendor/bin/phpunit
+
+notifications:
+  slack:
+    secure: MkCKfMtPbKYgMkGA3q9GpHt90Mg0SrrKZmD7wmgYoUYaF/QvHI+I44gU2a53w7wpVKeFiJ1B0ZGf8y4B6YeS8PlnzRQA6k2HmdlJ+6prTcWCqxPXxnbR1GXp427IxeIWbgo5fNt5DcfF7XMB5MKHWU8ZA/0dWkK/d5DyaSRn7kshIe1n9N804pIWmUjTW0teX9c4xrdoqGeJbwR74hsgEAkQpZ04ZtWR+tNmpXgfNKgqfleSG2FhD/fCXck2xYfWiac9sApaP3sDsOXQQDd/sAfGm5qGEpreE/g2WxlVprzT86JTH+hnT/BVPQq5yuQxViP8pypHQ1SCqQwJoT47Pi2HXZim8Pflu+gYMmtmIExudl7m7dtUyJx51GIV9d282BJIPXs/rI69HjW32Blb4iyrqwsqHbU096GnICXPTKBvD3TP2lp5Ke6s7qHfAZS4mTkZUCjb9U5avY8bhBzEqmdP48A7DoTqAfShmtIjMQCP8E3DKUd59VpJwsvxumBB/TcqCLVZa3HF8iCRpmrIf2UBkXbK/YfozQG+sBkhcr02pSeFCnPqCF1I1mlmFlDv+fV7STkLQpHbiMHcH4qiMejoyfK+U9lza7A489TFl8+ah0ZShMzmW33otJtzACKwWCvIvJNPKLzvEeHvHnDIeXxSMZkIv6TLRIuCNNGrNKQ=
+
