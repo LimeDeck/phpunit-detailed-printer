@@ -4,12 +4,14 @@
     "license": "ISC",
     "authors": [
         {
-            "name": "HR",
-            "email": "rudolf@limedeck.io"
+            "name": "LimeDeck",
+            "email": "mail@limedeck.io"
         }
     ],
+    "require": {
+    },
     "require-dev": {
-        "phpunit/phpunit": "~4.0"
+        "phpunit/phpunit": "~5.7"
     },
     "autoload": {
         "psr-4": {

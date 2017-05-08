@@ -1,4 +1,7 @@
-# Detailed PHPUnit printer - WIP
+# 📋 Detailed PHPUnit Printer
+
+[![Build Status](https://travis-ci.org/LimeDeck/phpunit-detailed-printer.svg?branch=master)](https://travis-ci.org/LimeDeck/phpunit-detailed-printer)
+[![GitHub release](https://img.shields.io/github/release/LimeDeck/phpunit-detailed-printer.svg)](https://github.com/limedeck/phpunit-detailed-printer)
 
 ## Installation
 
@@ -22,10 +25,8 @@ Set the printer class in `phpunit.xml`
 ```
 
 ## Tests
-TBD
+To run the test suite, use `phpunit` command.
 
 ## License
 
-ISC 
-
-Please see [LICENSE](LICENSE.md) for additional information.
+Detailed PHPUnit Printer is open-sourced software licensed under the ISC license. If you'd like to read the license agreement, click [here](LICENSE).

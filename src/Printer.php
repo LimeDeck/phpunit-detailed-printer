@@ -2,10 +2,10 @@
 
 namespace LimeDeck\Testing;
 
-use PHPUnit_Extensions_PhptTestCase;
+use Exception;
 use PHPUnit_Framework_AssertionFailedError;
 use PHPUnit_Framework_Test;
-use PHPUnit_Framework_TestCase;
+use PHPUnit_Framework_Warning;
 use PHPUnit_TextUI_ResultPrinter;
 use PHPUnit_Util_Test;
 
@@ -17,8 +17,12 @@ class Printer extends PHPUnit_TextUI_ResultPrinter
      * @var array
      */
     protected static $symbols = [
-        'E' => '!',
-        'F' => "\e[31m\xe2\x9c\x96\e[0m", // red X,
+        'E' => "\e[31m!\e[0m", // red !
+        'F' => "\e[31m\xe2\x9c\x96\e[0m", // red X
+        'W' => "\e[33mW\e[0m", // yellow W
+        'I' => "\e[33mI\e[0m", // yellow I
+        'R' => "\e[33mR\e[0m", // yellow R
+        'S' => "\e[36mS\e[0m", // cyan S
         '.' => "\e[32m\xe2\x9c\x94\e[0m", // green checkmark
     ];
 
@@ -38,24 +42,69 @@ class Printer extends PHPUnit_TextUI_ResultPrinter
             $progress = static::$symbols[$progress];
         }
 
-        $this->write(sprintf('%s %s', $progress, $this->testRow));
+        $this->write("{$progress} {$this->testRow}");
         $this->column++;
         $this->numTestsRun++;
     }
 
     /**
-     * A failure occurred.
-     *
-     * @param PHPUnit_Framework_Test                 $test
-     * @param PHPUnit_Framework_AssertionFailedError $e
-     * @param float                                  $time
+     * {@inheritdoc}
+     */
+    public function addError(PHPUnit_Framework_Test $test, Exception $e, $time)
+    {
+        $this->buildTestRow(get_class($test), $test->getName(), $time, 'fg-red');
+
+        parent::addError($test, $e, $time);
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function addFailure(PHPUnit_Framework_Test $test, PHPUnit_Framework_AssertionFailedError $e, $time)
     {
-        // TODO: this is not very nice :/
-        $this->buildTestRow("\e[31m".get_class($test), $test->getName()."\e[0m", $time);
-        $this->writeProgress('F');
-        $this->lastTestFailed = true;
+        $this->buildTestRow(get_class($test), $test->getName(), $time, 'fg-red');
+
+        parent::addFailure($test, $e, $time);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function addWarning(PHPUnit_Framework_Test $test, PHPUnit_Framework_Warning $e, $time)
+    {
+        $this->buildTestRow(get_class($test), $test->getName(), $time, 'fg-yellow');
+
+        parent::addWarning($test, $e, $time);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function addIncompleteTest(PHPUnit_Framework_Test $test, Exception $e, $time)
+    {
+        $this->buildTestRow(get_class($test), $test->getName(), $time, 'fg-yellow');
+
+        parent::addIncompleteTest($test, $e, $time);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function addRiskyTest(PHPUnit_Framework_Test $test, Exception $e, $time)
+    {
+        $this->buildTestRow(get_class($test), $test->getName(), $time, 'fg-yellow');
+
+        parent::addRiskyTest($test, $e, $time);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function addSkippedTest(PHPUnit_Framework_Test $test, Exception $e, $time)
+    {
+        $this->buildTestRow(get_class($test), $test->getName(), $time, 'fg-cyan');
+
+        parent::addSkippedTest($test, $e, $time);
     }
 
     /**
@@ -65,33 +114,19 @@ class Printer extends PHPUnit_TextUI_ResultPrinter
     {
         $testName = PHPUnit_Util_Test::describe($test);
 
-        if (!empty($testName)) {
+        if ($this->hasCompoundClassName($testName)) {
             list($className, $methodName) = explode('::', $testName);
 
             $this->buildTestRow($className, $methodName, $time);
         }
 
-        if (!$this->lastTestFailed) {
-            $this->writeProgress('.');
-        }
-
-        if ($test instanceof PHPUnit_Framework_TestCase) {
-            $this->numAssertions += $test->getNumAssertions();
-        } elseif ($test instanceof PHPUnit_Extensions_PhptTestCase) {
-            $this->numAssertions++;
-        }
-        
-        $this->lastTestFailed = false;
-
-        if ($test instanceof PHPUnit_Framework_TestCase) {
-            if (method_exists($this, 'hasExpectationOnOutput') && !$test->hasExpectationOnOutput()) {
-                $this->write($test->getActualOutput());
-            }
-        }
+        parent::endTest($test, $time);
     }
 
     /**
      * {@inheritdoc}
+     *
+     * We'll handle the coloring ourselves.
      */
     protected function writeProgressWithColor($color, $buffer)
     {
@@ -99,28 +134,91 @@ class Printer extends PHPUnit_TextUI_ResultPrinter
     }
 
     /**
+     * Formats the results for a single test.
+     *
      * @param $className
      * @param $methodName
      * @param $time
+     * @param $color
      */
-    private function buildTestRow($className, $methodName, $time)
+    protected function buildTestRow($className, $methodName, $time, $color = 'fg-white')
     {
-        $testDuration = round($time * 1000);
-
         $this->testRow = sprintf(
-            "%s: %s (%s ms)\n",
-            $className,
-            preg_replace('/(?<=\\w)(?=[A-Z])/', ' $1', ucfirst(str_replace('_', ' ', $methodName))),
-            $testDuration > 500 ? "\e[33m{$testDuration}\e[0m" : $testDuration
+            "%s (%s)\n",
+            $this->formatWithColor($color, "{$className}: {$this->formatMethodName($methodName)}"),
+            $this->formatTestDuration($time)
         );
     }
 
     /**
+     * Makes the method name more readable.
+     *
+     * @param $method
+     * @return mixed
+     */
+    protected function formatMethodName($method) {
+        return ucfirst(
+            $this->splitCamels(
+                $this->splitSnakes($method)
+            )
+        );
+    }
+
+    /**
+     * Replaces underscores in snake case with spaces.
+     *
+     * @param $name
+     * @return string
+     */
+    protected function splitSnakes($name) {
+        return str_replace('_', ' ', $name);
+    }
+
+    /**
+     * Splits camel-cased names while handling caps sections properly.
+     *
+     * @param $name
+     * @return string
+     */
+    protected function splitCamels($name) {
+        return preg_replace('/(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])/', ' $1', $name);
+    }
+
+    /**
+     * Colours the duration if the test took longer than 500ms.
+     *
+     * @param $time
+     * @return string
+     */
+    protected function formatTestDuration($time) {
+        $testDurationInMs = round($time * 1000);
+
+        $duration = $testDurationInMs > 500
+            ? $this->formatWithColor('fg-yellow', $testDurationInMs)
+            : $testDurationInMs;
+
+        return sprintf('%s ms', $duration);
+    }
+
+    /**
+     * Verifies if we have a replacement symbol available.
+     *
      * @param $progress
      * @return bool
      */
     protected function hasReplacementSymbol($progress)
     {
         return in_array($progress, array_keys(static::$symbols));
+    }
+
+    /**
+     * Checks if the class name is in format Class::method.
+     *
+     * @param $testName
+     * @return bool
+     */
+    protected function hasCompoundClassName($testName)
+    {
+        return ! empty($testName) && strpos($testName, '::') > -1;
     }
 }
