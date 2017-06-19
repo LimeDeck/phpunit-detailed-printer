@@ -31,7 +31,7 @@ There was 1 error:
 1) PrinterStatesTest::testError
 strpos() expects at least 2 parameters, 0 given
 
-%s/tests/_files/PrinterStatesTest.php:17
+%sPrinterStatesTest.php:17
 
 --
 
@@ -39,7 +39,7 @@ There was 1 warning:
 
 1) PrinterStatesTest::testWarning
 
-%s/tests/_files/PrinterStatesTest.php:27
+%sPrinterStatesTest.php:27
 
 --
 
@@ -48,7 +48,7 @@ There was 1 failure:
 1) PrinterStatesTest::testFailure
 Failed asserting that false is true.
 
-%s/tests/_files/PrinterStatesTest.php:12
+%sPrinterStatesTest.php:12
 
 [37;41mERRORS![0m
 [37;41mTests: 7[0m[37;41m, Assertions: 2[0m[37;41m, Errors: 1[0m[37;41m, Failures: 1[0m[37;41m, Warnings: 1[0m[37;41m, Skipped: 1[0m[37;41m, Incomplete: 1[0m[37;41m, Risky: 1[0m[37;41m.[0m

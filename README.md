@@ -1,6 +1,7 @@
 # 📋 Detailed PHPUnit Printer
 
-[![Build Status](https://travis-ci.org/LimeDeck/phpunit-detailed-printer.svg?branch=master)](https://travis-ci.org/LimeDeck/phpunit-detailed-printer)
+[![Build Status: Linux](https://travis-ci.org/LimeDeck/phpunit-detailed-printer.svg?branch=master)](https://travis-ci.org/LimeDeck/phpunit-detailed-printer)
+[![Build status: Windows](https://ci.appveyor.com/api/projects/status/656nmj6oxbnq4sri/branch/master?svg=true)](https://ci.appveyor.com/project/HRcc/phpunit-detailed-printer/branch/master)
 [![GitHub release](https://img.shields.io/github/release/LimeDeck/phpunit-detailed-printer.svg)](https://github.com/limedeck/phpunit-detailed-printer)
 
 ## Installation

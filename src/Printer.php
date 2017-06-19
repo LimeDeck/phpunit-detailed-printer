@@ -42,7 +42,7 @@ class Printer extends PHPUnit_TextUI_ResultPrinter
             $progress = static::$symbols[$progress];
         }
 
-        $this->write("{$progress} {$this->testRow}");
+        $this->write("{$progress} {$this->testRow}" . PHP_EOL);
         $this->column++;
         $this->numTestsRun++;
     }
@@ -144,7 +144,7 @@ class Printer extends PHPUnit_TextUI_ResultPrinter
     protected function buildTestRow($className, $methodName, $time, $color = 'fg-white')
     {
         $this->testRow = sprintf(
-            "%s (%s)\n",
+            "%s (%s)",
             $this->formatWithColor($color, "{$className}: {$this->formatMethodName($methodName)}"),
             $this->formatTestDuration($time)
         );
