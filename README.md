@@ -6,7 +6,7 @@
 
 ## Installation
 
-`composer require limedeck/phpunit-detailed-printer`
+`composer require limedeck/phpunit-detailed-printer --dev`
 
 This is what you get:
 
