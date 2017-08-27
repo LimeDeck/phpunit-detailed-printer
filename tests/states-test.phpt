@@ -50,5 +50,13 @@ Failed asserting that false is true.
 
 %sPrinterStatesTest.php:12
 
+--
+
+There was 1 risky test:
+
+1) PrinterStatesTest::testRisky
+
+%s/PrinterStatesTest.php:32
+
 [37;41mERRORS![0m
 [37;41mTests: 7[0m[37;41m, Assertions: 2[0m[37;41m, Errors: 1[0m[37;41m, Failures: 1[0m[37;41m, Warnings: 1[0m[37;41m, Skipped: 1[0m[37;41m, Incomplete: 1[0m[37;41m, Risky: 1[0m[37;41m.[0m
