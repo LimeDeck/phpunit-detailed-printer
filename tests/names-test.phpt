@@ -10,7 +10,7 @@ $_SERVER['argv'][4] = dirname(__FILE__) . '/_files/PrinterNamesTest.php';
 
 require_once (dirname(dirname(__FILE__))) . '/vendor/autoload.php';
 
-PHPUnit_TextUI_Command::main();
+PHPUnit\TextUI\Command::main();
 ?>
 --EXPECTF--
 PHPUnit %s by Sebastian Bergmann and contributors.

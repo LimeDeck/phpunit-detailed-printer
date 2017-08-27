@@ -1,6 +1,6 @@
 <?php
 
-class PrinterStatesTest extends PHPUnit_Framework_TestCase
+class PrinterStatesTest extends PHPUnit\Framework\TestCase
 {
     public function testSuccess()
     {
@@ -24,12 +24,12 @@ class PrinterStatesTest extends PHPUnit_Framework_TestCase
 
     public function testWarning()
     {
-        throw new PHPUnit_Framework_Warning();
+        throw new PHPUnit\Framework\Warning();
     }
 
     public function testRisky()
     {
-        throw new PHPUnit_Framework_RiskyTestError();
+        throw new PHPUnit\Framework\RiskyTestError();
     }
 
     public function testIncomplete()
