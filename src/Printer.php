@@ -3,13 +3,13 @@
 namespace LimeDeck\Testing;
 
 use Exception;
-use PHPUnit_Framework_AssertionFailedError;
-use PHPUnit_Framework_Test;
-use PHPUnit_Framework_Warning;
-use PHPUnit_TextUI_ResultPrinter;
-use PHPUnit_Util_Test;
+use PHPUnit\Framework\AssertionFailedError;
+use PHPUnit\Framework\Warning;
+use PHPUnit\Framework\Test;
+use PHPUnit\TextUI\ResultPrinter;
+use PHPUnit\Util\Test as UtilTest;
 
-class Printer extends PHPUnit_TextUI_ResultPrinter
+class Printer extends ResultPrinter
 {
     /**
      * Replacement symbols for test statuses.
@@ -50,7 +50,7 @@ class Printer extends PHPUnit_TextUI_ResultPrinter
     /**
      * {@inheritdoc}
      */
-    public function addError(PHPUnit_Framework_Test $test, Exception $e, $time)
+    public function addError(Test $test, Exception $e, $time)
     {
         $this->buildTestRow(get_class($test), $test->getName(), $time, 'fg-red');
 
@@ -60,7 +60,7 @@ class Printer extends PHPUnit_TextUI_ResultPrinter
     /**
      * {@inheritdoc}
      */
-    public function addFailure(PHPUnit_Framework_Test $test, PHPUnit_Framework_AssertionFailedError $e, $time)
+    public function addFailure(Test $test, AssertionFailedError $e, $time)
     {
         $this->buildTestRow(get_class($test), $test->getName(), $time, 'fg-red');
 
@@ -70,7 +70,7 @@ class Printer extends PHPUnit_TextUI_ResultPrinter
     /**
      * {@inheritdoc}
      */
-    public function addWarning(PHPUnit_Framework_Test $test, PHPUnit_Framework_Warning $e, $time)
+    public function addWarning(Test $test, Warning $e, $time)
     {
         $this->buildTestRow(get_class($test), $test->getName(), $time, 'fg-yellow');
 
@@ -80,7 +80,7 @@ class Printer extends PHPUnit_TextUI_ResultPrinter
     /**
      * {@inheritdoc}
      */
-    public function addIncompleteTest(PHPUnit_Framework_Test $test, Exception $e, $time)
+    public function addIncompleteTest(Test $test, Exception $e, $time)
     {
         $this->buildTestRow(get_class($test), $test->getName(), $time, 'fg-yellow');
 
@@ -90,7 +90,7 @@ class Printer extends PHPUnit_TextUI_ResultPrinter
     /**
      * {@inheritdoc}
      */
-    public function addRiskyTest(PHPUnit_Framework_Test $test, Exception $e, $time)
+    public function addRiskyTest(Test $test, Exception $e, $time)
     {
         $this->buildTestRow(get_class($test), $test->getName(), $time, 'fg-yellow');
 
@@ -100,7 +100,7 @@ class Printer extends PHPUnit_TextUI_ResultPrinter
     /**
      * {@inheritdoc}
      */
-    public function addSkippedTest(PHPUnit_Framework_Test $test, Exception $e, $time)
+    public function addSkippedTest(Test $test, Exception $e, $time)
     {
         $this->buildTestRow(get_class($test), $test->getName(), $time, 'fg-cyan');
 
@@ -110,9 +110,9 @@ class Printer extends PHPUnit_TextUI_ResultPrinter
     /**
      * {@inheritdoc}
      */
-    public function endTest(PHPUnit_Framework_Test $test, $time)
+    public function endTest(Test $test, $time)
     {
-        $testName = PHPUnit_Util_Test::describe($test);
+        $testName = UtilTest::describe($test);
 
         if ($this->hasCompoundClassName($testName)) {
             list($className, $methodName) = explode('::', $testName);

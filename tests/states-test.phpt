@@ -10,7 +10,7 @@ $_SERVER['argv'][4] = dirname(__FILE__) . '/_files/PrinterStatesTest.php';
 
 require_once (dirname(dirname(__FILE__))) . '/vendor/autoload.php';
 
-PHPUnit_TextUI_Command::main();
+PHPUnit\TextUI\Command::main();
 ?>
 --EXPECTF--
 PHPUnit %s by Sebastian Bergmann and contributors.
@@ -49,6 +49,14 @@ There was 1 failure:
 Failed asserting that false is true.
 
 %sPrinterStatesTest.php:12
+
+--
+
+There was 1 risky test:
+
+1) PrinterStatesTest::testRisky
+
+%sPrinterStatesTest.php:32
 
 [37;41mERRORS![0m
 [37;41mTests: 7[0m[37;41m, Assertions: 2[0m[37;41m, Errors: 1[0m[37;41m, Failures: 1[0m[37;41m, Warnings: 1[0m[37;41m, Skipped: 1[0m[37;41m, Incomplete: 1[0m[37;41m, Risky: 1[0m[37;41m.[0m
