@@ -35,4 +35,4 @@ Thanks for your interest in PHPUnit Detailed Printer! If you'd like to contribut
 
 ## License
 
-Detailed PHPUnit Printer is open-sourced software licensed under the ISC license. If you'd like to read the license agreement, click [here](LICENSE.md).
+Detailed PHPUnit Printer is open-sourced software licensed under the MIT license. If you'd like to read the license agreement, click [here](LICENSE).
