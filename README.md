@@ -6,6 +6,8 @@
 
 ## Installation
 
+**For PHPUnit < 6.0, use package version ^2.0.0**
+
 `composer require limedeck/phpunit-detailed-printer --dev`
 
 This is what you get:
@@ -28,6 +30,9 @@ Set the printer class in `phpunit.xml`
 ## Tests
 To run the test suite, use `phpunit` command.
 
+## Contributing
+Thanks for your interest in PHPUnit Detailed Printer! If you'd like to contribute, please read our [contributing guide](CONTRIBUTING.md).
+
 ## License
 
-Detailed PHPUnit Printer is open-sourced software licensed under the ISC license. If you'd like to read the license agreement, click [here](LICENSE.md).
+Detailed PHPUnit Printer is open-sourced software licensed under the MIT license. If you'd like to read the license agreement, click [here](LICENSE).
