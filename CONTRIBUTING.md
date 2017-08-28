@@ -2,7 +2,7 @@
 
 Thank you for considering contributing to PHPUnit Detailed Printer!
 
-Please note, that PHPUnit Detailed Printer is released with a [Contributor Code of Conduct](code-of-conduct.md). By participating in this project you agree to abide by its terms.
+Please note, that PHPUnit Detailed Printer is released with a [Contributor Code of Conduct](CODE_OF_CONDUCT.md). By participating in this project you agree to abide by its terms.
 
 ## How to help
 
