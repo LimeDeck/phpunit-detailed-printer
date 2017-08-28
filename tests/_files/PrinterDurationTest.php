@@ -1,6 +1,6 @@
 <?php
 
-class PrinterDurationTest extends PHPUnit_Framework_TestCase
+class PrinterDurationTest extends PHPUnit\Framework\TestCase
 {
     public function testShort()
     {
