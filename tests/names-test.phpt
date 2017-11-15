@@ -15,11 +15,11 @@ PHPUnit\TextUI\Command::main();
 --EXPECTF--
 PHPUnit %s by Sebastian Bergmann and contributors.
 
-[32m✔[0m [37mPrinterNamesTest: Test It Supports Camel Case[0m (%s ms)
-[32m✔[0m [37mPrinterNamesTest: Test It Supports Camel Case With CAPS Parts[0m (%s ms)
-[32m✔[0m [37mPrinterNamesTest: It supports snake case[0m (%s ms)
-[32m✔[0m [37mPrinterNamesTest: Itworkswithoutspacesaswell[0m (%s ms)
-[32m✔[0m [37mPrinterNamesTest: Test Supports whatever Case[0m (%s ms)
+(1/5) [32m✔[0m [37mPrinterNamesTest: Test It Supports Camel Case[0m (%s ms)
+(2/5) [32m✔[0m [37mPrinterNamesTest: Test It Supports Camel Case With CAPS Parts[0m (%s ms)
+(3/5) [32m✔[0m [37mPrinterNamesTest: It supports snake case[0m (%s ms)
+(4/5) [32m✔[0m [37mPrinterNamesTest: Itworkswithoutspacesaswell[0m (%s ms)
+(5/5) [32m✔[0m [37mPrinterNamesTest: Test Supports whatever Case[0m (%s ms)
 
 
 Time: %s, Memory: %sMB

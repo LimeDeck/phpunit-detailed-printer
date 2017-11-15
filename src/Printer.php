@@ -38,13 +38,13 @@ class Printer extends ResultPrinter
      */
     protected function writeProgress($progress)
     {
+        $this->numTestsRun++;
+
         if ($this->hasReplacementSymbol($progress)) {
             $progress = static::$symbols[$progress];
         }
 
-        $this->write("{$progress} {$this->testRow}" . PHP_EOL);
-        $this->column++;
-        $this->numTestsRun++;
+        $this->write("({$this->numTestsRun}/{$this->numTests}) {$progress} {$this->testRow}" . PHP_EOL);
     }
 
     /**

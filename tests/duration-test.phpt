@@ -15,8 +15,8 @@ PHPUnit\TextUI\Command::main();
 --EXPECTF--
 PHPUnit %s by Sebastian Bergmann and contributors.
 
-[32m✔[0m [37mPrinterDurationTest: Test Short[0m (%s ms)
-[32m✔[0m [37mPrinterDurationTest: Test Long[0m ([33m%s[0m ms)
+(1/2) [32m✔[0m [37mPrinterDurationTest: Test Short[0m (%s ms)
+(2/2) [32m✔[0m [37mPrinterDurationTest: Test Long[0m ([33m%s[0m ms)
 
 
 Time: %s, Memory: %sMB
