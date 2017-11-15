@@ -44,7 +44,9 @@ class Printer extends ResultPrinter
             $progress = static::$symbols[$progress];
         }
 
-        $this->write("({$this->numTestsRun}/{$this->numTests}) {$progress} {$this->testRow}" . PHP_EOL);
+        $padding = str_pad($this->numTestsRun, strlen($this->numTests), ' ', STR_PAD_LEFT);
+
+        $this->write("({$padding}/{$this->numTests}) {$progress} {$this->testRow}" . PHP_EOL);
     }
 
     /**
