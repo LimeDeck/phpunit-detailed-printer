@@ -10,9 +10,13 @@
 
 `composer require limedeck/phpunit-detailed-printer --dev`
 
-This is what you get:
+It turns the default PHPUnit output...
 
-![detailed-printer](http://image.prntscr.com/image/c16bd3bae31840b0aaa849812eff141b.png "PHPUnit output with this printer.")
+![detailed-printer](https://d.pr/i/dmbJVN "Default PHPUnit output.")
+
+... into a more informative output with readable function names and execution time allowing you to start fixing errors even before the whole suite finishes:
+
+![detailed-printer](https://d.pr/i/WBUIOV "PHPUnit output with this printer.")
 
 ## Usage
 
