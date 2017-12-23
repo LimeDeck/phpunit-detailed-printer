@@ -12,11 +12,11 @@
 
 It turns the default PHPUnit output...
 
-![detailed-printer](https://d.pr/i/dmbJVN "Default PHPUnit output.")
+![default-printer](./screenshots/phpunit-default.png "Default PHPUnit output.")
 
 ... into a more informative output with readable function names and execution time allowing you to start fixing errors even before the whole suite finishes:
 
-![detailed-printer](https://d.pr/i/WBUIOV "PHPUnit output with this printer.")
+![detailed-printer](./screenshots/phpunit-pretty.png "PHPUnit output with this printer.")
 
 ## Usage
 
