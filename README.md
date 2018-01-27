@@ -34,6 +34,10 @@ Set the printer class in `phpunit.xml`
 ## Tests
 To run the test suite, use `phpunit` command.
 
+```bash
+phpunit --printer 'LimeDeck\Testing\Printer'
+```
+
 ## Contributing
 Thanks for your interest in PHPUnit Detailed Printer! If you'd like to contribute, please read our [contributing guide](CONTRIBUTING.md).
 
