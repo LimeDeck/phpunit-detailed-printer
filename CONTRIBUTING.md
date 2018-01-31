@@ -28,4 +28,4 @@ Please search the issue tracker before opening an issue. Try to add as much info
 
 1. run the test suite `vendor/bin/phpunit`
 2. Add a comprehensive commit message, and if your code is fixing an issue, please add a hash to the issue (i.e. fixes #14)
-3. submit the pull request to a new branch, please do not create PRs to the master branch.
+3. submit the pull request (please use topical branches, e.g. feature-color-checkmarks, not master)
