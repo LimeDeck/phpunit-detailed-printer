@@ -210,7 +210,7 @@ class Printer extends ResultPrinter
      */
     protected function hasReplacementSymbol($progress)
     {
-        return in_array($progress, array_keys(static::$symbols));
+        return $this->colors && in_array($progress, array_keys(static::$symbols));
     }
 
     /**
