@@ -116,11 +116,7 @@ class Printer extends ResultPrinter
     {
         $testName = UtilTest::describe($test);
 
-        if ($this->hasCompoundClassName($testName)) {
-            list($className, $methodName) = explode('::', $testName);
-
-            $this->buildTestRow($className, $methodName, $time);
-        }
+        $this->buildTestRow($testName[0], $testName[1], $time);
 
         parent::endTest($test, $time);
     }
@@ -211,16 +207,5 @@ class Printer extends ResultPrinter
     protected function hasReplacementSymbol($progress)
     {
         return $this->colors && in_array($progress, array_keys(static::$symbols));
-    }
-
-    /**
-     * Checks if the class name is in format Class::method.
-     *
-     * @param $testName
-     * @return bool
-     */
-    protected function hasCompoundClassName($testName)
-    {
-        return ! empty($testName) && strpos($testName, '::') > -1;
     }
 }
