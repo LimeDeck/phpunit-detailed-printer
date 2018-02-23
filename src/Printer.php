@@ -36,7 +36,7 @@ class Printer extends ResultPrinter
     /**
      * {@inheritdoc}
      */
-    protected function writeProgress($progress)
+    protected function writeProgress($progress) : void
     {
         $this->numTestsRun++;
 
@@ -52,7 +52,7 @@ class Printer extends ResultPrinter
     /**
      * {@inheritdoc}
      */
-    public function addError(Test $test, Exception $e, $time)
+    public function addError(Test $test, \Throwable $e, float $time) : void
     {
         $this->buildTestRow(get_class($test), $test->getName(), $time, 'fg-red');
 
@@ -62,7 +62,7 @@ class Printer extends ResultPrinter
     /**
      * {@inheritdoc}
      */
-    public function addFailure(Test $test, AssertionFailedError $e, $time)
+    public function addFailure(Test $test, AssertionFailedError $e, float $time) : void
     {
         $this->buildTestRow(get_class($test), $test->getName(), $time, 'fg-red');
 
@@ -72,7 +72,7 @@ class Printer extends ResultPrinter
     /**
      * {@inheritdoc}
      */
-    public function addWarning(Test $test, Warning $e, $time)
+    public function addWarning(Test $test, Warning $e, float $time) : void
     {
         $this->buildTestRow(get_class($test), $test->getName(), $time, 'fg-yellow');
 
@@ -82,7 +82,7 @@ class Printer extends ResultPrinter
     /**
      * {@inheritdoc}
      */
-    public function addIncompleteTest(Test $test, Exception $e, $time)
+    public function addIncompleteTest(Test $test, \Throwable $e, float $time) : void
     {
         $this->buildTestRow(get_class($test), $test->getName(), $time, 'fg-yellow');
 
@@ -92,7 +92,7 @@ class Printer extends ResultPrinter
     /**
      * {@inheritdoc}
      */
-    public function addRiskyTest(Test $test, Exception $e, $time)
+    public function addRiskyTest(Test $test, \Throwable $e, float $time) : void
     {
         $this->buildTestRow(get_class($test), $test->getName(), $time, 'fg-yellow');
 
@@ -102,7 +102,7 @@ class Printer extends ResultPrinter
     /**
      * {@inheritdoc}
      */
-    public function addSkippedTest(Test $test, Exception $e, $time)
+    public function addSkippedTest(Test $test, \Throwable $e, float $time) : void
     {
         $this->buildTestRow(get_class($test), $test->getName(), $time, 'fg-cyan');
 
@@ -112,7 +112,7 @@ class Printer extends ResultPrinter
     /**
      * {@inheritdoc}
      */
-    public function endTest(Test $test, $time)
+    public function endTest(Test $test, float $time) : void
     {
         $testName = UtilTest::describe($test);
 
@@ -130,9 +130,9 @@ class Printer extends ResultPrinter
      *
      * We'll handle the coloring ourselves.
      */
-    protected function writeProgressWithColor($color, $buffer)
+    protected function writeProgressWithColor($color, $buffer) : void
     {
-        return $this->writeProgress($buffer);
+        $this->writeProgress($buffer);
     }
 
     /**
