@@ -1,15 +1,5 @@
 # 📋 Detailed PHPUnit Printer
 
-[![Build Status: Linux](https://travis-ci.org/LimeDeck/phpunit-detailed-printer.svg?branch=master)](https://travis-ci.org/LimeDeck/phpunit-detailed-printer)
-[![Build status: Windows](https://ci.appveyor.com/api/projects/status/656nmj6oxbnq4sri/branch/master?svg=true)](https://ci.appveyor.com/project/HRcc/phpunit-detailed-printer/branch/master)
-[![GitHub release](https://img.shields.io/github/release/LimeDeck/phpunit-detailed-printer.svg)](https://github.com/limedeck/phpunit-detailed-printer)
-
-## Installation
-
-**For PHPUnit < 6.0, use package version ^2.0.0**
-
-`composer require limedeck/phpunit-detailed-printer --dev`
-
 It turns the default PHPUnit output...
 
 ![default-printer](./screenshots/phpunit-default.png "Default PHPUnit output.")
@@ -17,6 +7,25 @@ It turns the default PHPUnit output...
 ... into a more informative output with readable function names and execution time allowing you to start fixing errors even before the whole suite finishes:
 
 ![detailed-printer](./screenshots/phpunit-pretty.png "PHPUnit output with this printer.")
+
+[![Build Status: Linux](https://travis-ci.org/LimeDeck/phpunit-detailed-printer.svg?branch=master)](https://travis-ci.org/LimeDeck/phpunit-detailed-printer)
+[![Build status: Windows](https://ci.appveyor.com/api/projects/status/656nmj6oxbnq4sri/branch/master?svg=true)](https://ci.appveyor.com/project/HRcc/phpunit-detailed-printer/branch/master)
+[![GitHub release](https://img.shields.io/github/release/LimeDeck/phpunit-detailed-printer.svg)](https://github.com/limedeck/phpunit-detailed-printer)
+
+## Installation
+
+```
+composer require limedeck/phpunit-detailed-printer --dev
+```
+
+### PHPUnit version compatibility
+
+ PHPUnit  | Package
+:---------|:----------
+ 7.x.x    | 4.x.x
+ 6.x.x    | 3.2.x
+ 5.x.x    | 2.0.x
+
 
 ## Usage
 
