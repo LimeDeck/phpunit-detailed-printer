@@ -5,4 +5,4 @@
 /.travis.yml        export-ignore
 /.appveyor.yml      export-ignore
 /phpunit.xml.dist   export-ignore
-/.githubb           export-ignore
+/.github            export-ignore
