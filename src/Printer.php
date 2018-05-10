@@ -36,7 +36,7 @@ class Printer extends ResultPrinter
     /**
      * {@inheritdoc}
      */
-    protected function writeProgress($progress) : void
+    protected function writeProgress(string $progress) : void
     {
         $this->numTestsRun++;
 
@@ -126,7 +126,7 @@ class Printer extends ResultPrinter
      *
      * We'll handle the coloring ourselves.
      */
-    protected function writeProgressWithColor($color, $buffer) : void
+    protected function writeProgressWithColor(string $color, string $buffer) : void
     {
         $this->writeProgress($buffer);
     }
