@@ -28,4 +28,21 @@ class PrinterNamesTest extends PHPUnit\Framework\TestCase
     {
         $this->assertTrue(true);
     }
+
+    /**
+     * @test
+     * @dataProvider dataSetExamples
+     */
+    public function itSupportsDataProvider($a, $b, $expected)
+    {
+        $this->assertTrue($expected);
+    }
+
+    public function dataSetExamples()
+    {
+        return [
+            ['a', 'b', true],
+            [1, [1, 2], false],
+        ];
+    }
 }
