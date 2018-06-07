@@ -114,9 +114,11 @@ class Printer extends ResultPrinter
      */
     public function endTest(Test $test, float $time) : void
     {
-        $testName = UtilTest::describe($test);
+        $testName = UtilTest::describeAsString($test);
 
-        $this->buildTestRow($testName[0], $testName[1], $time);
+        list($className, $methodName) = explode("::", $testName);
+
+        $this->buildTestRow($className, $methodName, $time);
 
         parent::endTest($test, $time);
     }

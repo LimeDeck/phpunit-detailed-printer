@@ -31,7 +31,7 @@ There was 1 failure:
 1) PrinterNamesTest::itSupportsDataProvider with data set #1 (1, array(1, 2), false)
 Failed asserting that false is true.
 
-%s/phpunit-detailed-printer/tests/_files/PrinterNamesTest.php:38
+%sPrinterNamesTest.php:38
 
 [37;41mFAILURES![0m
 [37;41mTests: 7[0m[37;41m, Assertions: 7[0m[37;41m, Failures: 1[0m[37;41m.[0m
