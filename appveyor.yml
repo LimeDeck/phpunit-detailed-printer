@@ -4,8 +4,8 @@ platform:
 clone_folder: c:\projects\phpunit-detailed-printer
 environment:
   matrix:
-    - php_version: 7.1
     - php_version: 7.2
+    - php_version: 7.3
 ## Cache composer, chocolatey and php bits
 cache:
     - '%LOCALAPPDATA%\Composer\files -> composer.lock'
