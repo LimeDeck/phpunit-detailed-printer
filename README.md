@@ -22,6 +22,7 @@ composer require limedeck/phpunit-detailed-printer --dev
 
  PHPUnit  | Package
 :---------|:----------
+ 8.x.x    | 5.x.x
  7.x.x    | 4.x.x
  6.x.x    | 3.2.x
  5.x.x    | 2.0.x

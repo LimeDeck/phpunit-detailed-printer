@@ -32,6 +32,10 @@ class PrinterNamesTest extends PHPUnit\Framework\TestCase
     /**
      * @test
      * @dataProvider dataSetExamples
+     *
+     * @param mixed $a
+     * @param mixed $b
+     * @param mixed $expected
      */
     public function itSupportsDataProvider($a, $b, $expected)
     {

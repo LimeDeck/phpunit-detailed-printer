@@ -2,12 +2,11 @@
 
 namespace LimeDeck\Testing;
 
-use Exception;
-use PHPUnit\Framework\AssertionFailedError;
-use PHPUnit\Framework\Warning;
 use PHPUnit\Framework\Test;
+use PHPUnit\Framework\Warning;
 use PHPUnit\TextUI\ResultPrinter;
 use PHPUnit\Util\Test as UtilTest;
+use PHPUnit\Framework\AssertionFailedError;
 
 class Printer extends ResultPrinter
 {
@@ -36,7 +35,7 @@ class Printer extends ResultPrinter
     /**
      * {@inheritdoc}
      */
-    protected function writeProgress(string $progress) : void
+    protected function writeProgress(string $progress): void
     {
         $this->numTestsRun++;
 
@@ -46,13 +45,13 @@ class Printer extends ResultPrinter
 
         $padding = str_pad($this->numTestsRun, strlen($this->numTests), ' ', STR_PAD_LEFT);
 
-        $this->write("({$padding}/{$this->numTests}) {$progress} {$this->testRow}" . PHP_EOL);
+        $this->write("({$padding}/{$this->numTests}) {$progress} {$this->testRow}".PHP_EOL);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function addError(Test $test, \Throwable $e, float $time) : void
+    public function addError(Test $test, \Throwable $e, float $time): void
     {
         $this->buildTestRow(get_class($test), $test->getName(), $time, 'fg-red');
 
@@ -62,7 +61,7 @@ class Printer extends ResultPrinter
     /**
      * {@inheritdoc}
      */
-    public function addFailure(Test $test, AssertionFailedError $e, float $time) : void
+    public function addFailure(Test $test, AssertionFailedError $e, float $time): void
     {
         $this->buildTestRow(get_class($test), $test->getName(), $time, 'fg-red');
 
@@ -72,7 +71,7 @@ class Printer extends ResultPrinter
     /**
      * {@inheritdoc}
      */
-    public function addWarning(Test $test, Warning $e, float $time) : void
+    public function addWarning(Test $test, Warning $e, float $time): void
     {
         $this->buildTestRow(get_class($test), $test->getName(), $time, 'fg-yellow');
 
@@ -82,7 +81,7 @@ class Printer extends ResultPrinter
     /**
      * {@inheritdoc}
      */
-    public function addIncompleteTest(Test $test, \Throwable $e, float $time) : void
+    public function addIncompleteTest(Test $test, \Throwable $e, float $time): void
     {
         $this->buildTestRow(get_class($test), $test->getName(), $time, 'fg-yellow');
 
@@ -92,7 +91,7 @@ class Printer extends ResultPrinter
     /**
      * {@inheritdoc}
      */
-    public function addRiskyTest(Test $test, \Throwable $e, float $time) : void
+    public function addRiskyTest(Test $test, \Throwable $e, float $time): void
     {
         $this->buildTestRow(get_class($test), $test->getName(), $time, 'fg-yellow');
 
@@ -102,7 +101,7 @@ class Printer extends ResultPrinter
     /**
      * {@inheritdoc}
      */
-    public function addSkippedTest(Test $test, \Throwable $e, float $time) : void
+    public function addSkippedTest(Test $test, \Throwable $e, float $time): void
     {
         $this->buildTestRow(get_class($test), $test->getName(), $time, 'fg-cyan');
 
@@ -112,11 +111,11 @@ class Printer extends ResultPrinter
     /**
      * {@inheritdoc}
      */
-    public function endTest(Test $test, float $time) : void
+    public function endTest(Test $test, float $time): void
     {
         $testName = UtilTest::describeAsString($test);
 
-        list($className, $methodName) = explode("::", $testName);
+        list($className, $methodName) = explode('::', $testName);
 
         $this->buildTestRow($className, $methodName, $time);
 
@@ -128,7 +127,7 @@ class Printer extends ResultPrinter
      *
      * We'll handle the coloring ourselves.
      */
-    protected function writeProgressWithColor(string $color, string $buffer) : void
+    protected function writeProgressWithColor(string $color, string $buffer): void
     {
         $this->writeProgress($buffer);
     }
@@ -144,8 +143,8 @@ class Printer extends ResultPrinter
     protected function buildTestRow($className, $methodName, $time, $color = 'fg-white')
     {
         $this->testRow = sprintf(
-            "%s (%s)",
-            $this->formatWithColor($color, "{$className}: {$this->formatMethodName($methodName)}"),
+            '%s (%s)',
+            $this->colorizeTextBox($color, "{$className}: {$this->formatMethodName($methodName)}"),
             $this->formatTestDuration($time)
         );
     }
@@ -154,9 +153,11 @@ class Printer extends ResultPrinter
      * Makes the method name more readable.
      *
      * @param $method
+     *
      * @return mixed
      */
-    protected function formatMethodName($method) {
+    protected function formatMethodName($method)
+    {
         return ucfirst(
             $this->splitCamels(
                 $this->splitSnakes($method)
@@ -168,9 +169,11 @@ class Printer extends ResultPrinter
      * Replaces underscores in snake case with spaces.
      *
      * @param $name
+     *
      * @return string
      */
-    protected function splitSnakes($name) {
+    protected function splitSnakes($name)
+    {
         return str_replace('_', ' ', $name);
     }
 
@@ -178,9 +181,11 @@ class Printer extends ResultPrinter
      * Splits camel-cased names while handling caps sections properly.
      *
      * @param $name
+     *
      * @return string
      */
-    protected function splitCamels($name) {
+    protected function splitCamels($name)
+    {
         return preg_replace('/(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])/', ' $1', $name);
     }
 
@@ -188,13 +193,15 @@ class Printer extends ResultPrinter
      * Colours the duration if the test took longer than 500ms.
      *
      * @param $time
+     *
      * @return string
      */
-    protected function formatTestDuration($time) {
+    protected function formatTestDuration($time)
+    {
         $testDurationInMs = round($time * 1000);
 
         $duration = $testDurationInMs > 500
-            ? $this->formatWithColor('fg-yellow', $testDurationInMs)
+            ? $this->colorizeTextBox('fg-yellow', $testDurationInMs)
             : $testDurationInMs;
 
         return sprintf('%s ms', $duration);
@@ -204,6 +211,7 @@ class Printer extends ResultPrinter
      * Verifies if we have a replacement symbol available.
      *
      * @param $progress
+     *
      * @return bool
      */
     protected function hasReplacementSymbol($progress)

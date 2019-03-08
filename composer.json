@@ -11,12 +11,17 @@
     "require": {
     },
     "require-dev": {
-        "phpunit/phpunit": "~7.0"
+        "phpunit/phpunit": "~8.0",
+        "friendsofphp/php-cs-fixer": "^2.14"
     },
     "autoload": {
         "psr-4": {
             "LimeDeck\\Testing\\": "src/"
         }
+    },
+    "scripts": {
+      "cs:check": "vendor/bin/php-cs-fixer fix --verbose --ansi --show-progress=estimating --diff --dry-run",
+      "cs:fix": "vendor/bin/php-cs-fixer fix --verbose --ansi --show-progress=estimating"
     },
     "minimum-stability": "stable"
 }
