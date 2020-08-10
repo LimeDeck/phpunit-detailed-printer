@@ -17,8 +17,4 @@ PHPUnit\TextUI\Command::main();
 --EXPECTF--
 PHPUnit %s by Sebastian Bergmann and contributors.
 
-
-
-Time: %s, Memory: %sMB
-
 [30;43mNo tests executed![0m
