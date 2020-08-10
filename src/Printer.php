@@ -4,8 +4,8 @@ namespace LimeDeck\Testing;
 
 use PHPUnit\Framework\Test;
 use PHPUnit\Framework\Warning;
-use PHPUnit\TextUI\DefaultResultPrinter;
 use PHPUnit\Util\Test as UtilTest;
+use PHPUnit\TextUI\DefaultResultPrinter;
 use PHPUnit\Framework\AssertionFailedError;
 
 class Printer extends DefaultResultPrinter
