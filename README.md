@@ -50,7 +50,7 @@ It replaces the progress dots and does nothing when progress output is off (`--n
 To run the test suite, use `phpunit` command.
 
 ## Contributing
-Thanks for your interest in PHPUnit Detailed Printer! If you'd like to contribute, please read our [contributing guide](CONTRIBUTING.md).
+Thanks for your interest in PHPUnit Detailed Printer! If you'd like to contribute, please read our [contributing guide](.github/CONTRIBUTING.md).
 
 ## License
 
