@@ -31,7 +31,7 @@ Time: %s, Memory: %s MB
 
 There was 1 failure:
 
-1) PrinterNamesTest::itSupportsDataProvider%s(1, [1, 2], false)
+1) PrinterNamesTest::itSupportsDataProvider%s
 Failed asserting that false is true.
 
 %sPrinterNamesTest.php:39

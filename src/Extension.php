@@ -14,7 +14,7 @@ final class Extension implements PhpunitExtension
         if ($configuration->noOutput()
             || $configuration->noProgress()
             || $configuration->outputIsTeamCity()
-            || $configuration->debug()) {
+            || (method_exists($configuration, 'debug') && $configuration->debug())) {
             return;
         }
 
