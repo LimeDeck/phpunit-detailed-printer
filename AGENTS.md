@@ -7,8 +7,8 @@ PHP library: a PHPUnit extension that replaces the progress dots with one detail
 ```sh
 composer install
 vendor/bin/phpunit   # run the test suite
-composer cs:check    # check code style
-composer cs:fix      # fix code style
+mise run cs:check    # check code style
+mise run cs:fix      # fix code style
 ```
 
 ## Layout
@@ -22,5 +22,5 @@ composer cs:fix      # fix code style
 - Support every PHP and PHPUnit version that `composer.json` allows (PHP 8.3+, PHPUnit 10.5 to 13). Use only PHPUnit APIs that exist in all of them. Guard a newer API with `method_exists()`, as `src/Extension.php` does.
 - Do not add runtime dependencies. Users install this package in their own projects.
 - When the printed output changes, update the matching `--EXPECTF--` blocks. Do not loosen them with `%s` to make a test pass.
-- Run `vendor/bin/phpunit` and `composer cs:check` before you finish. CI runs the full PHP and PHPUnit matrix.
+- Run `vendor/bin/phpunit` and `mise run cs:check` before you finish. CI runs the full PHP and PHPUnit matrix.
 - Do not edit `composer.lock` by hand.
