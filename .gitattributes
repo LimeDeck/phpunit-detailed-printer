@@ -6,3 +6,5 @@
 /phpunit.xml.dist        export-ignore
 /.github                 export-ignore
 /composer.lock           export-ignore
+/AGENTS.md               export-ignore
+/CLAUDE.md               export-ignore
