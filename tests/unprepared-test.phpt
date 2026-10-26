@@ -36,7 +36,7 @@ There were 3 errors:
 1) BeforeClassErrorTest
 RuntimeException: Before class
 
-%sUnprepared/BeforeClassErrorTest.php:7
+%sUnprepared%eBeforeClassErrorTest.php:7
 
 2) IsolationCrashTest::testCrashInChildProcess
 Test was run in child process and ended unexpectedly
@@ -44,7 +44,7 @@ Test was run in child process and ended unexpectedly
 3) SetUpErrorTest::testSetUpError
 RuntimeException: Set up
 
-%sUnprepared/SetUpErrorTest.php:7
+%sUnprepared%eSetUpErrorTest.php:7
 
 --
 
@@ -53,7 +53,7 @@ There was 1 failure:
 1) DependencyTest::testFailure
 Failed asserting that false is true.
 
-%sUnprepared/DependencyTest.php:9
+%sUnprepared%eDependencyTest.php:9
 
 [37;41mERRORS![0m
 [37;41mTests: %d[0m[37;41m, Assertions: 2[0m[37;41m, Errors: 3[0m[37;41m, Failures: 1[0m[37;41m, Skipped: 3[0m[37;41m.[0m
