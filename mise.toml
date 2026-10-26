@@ -4,6 +4,7 @@ version = "8.3.36"
 [tools."http:php".platforms]
 macos-arm64 = { url = "https://dl.static-php.dev/v3/php-bin/common/php-{{ version }}-cli-macos-aarch64.tar.gz" }
 linux-x64 = { url = "https://dl.static-php.dev/v3/php-bin/common/php-{{ version }}-cli-linux-x86_64.tar.gz" }
+linux-arm64 = { url = "https://dl.static-php.dev/v3/php-bin/common/php-{{ version }}-cli-linux-aarch64.tar.gz" }
 windows-x64 = { url = "https://dl.static-php.dev/v3/php-bin/spc-max/php-{{ version }}-cli-win.zip" }
 
 [tools."http:composer"]
