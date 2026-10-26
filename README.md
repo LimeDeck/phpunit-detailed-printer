@@ -13,6 +13,8 @@ It turns the default PHPUnit output...
 
 ## Installation
 
+Requires PHP 8.3 or newer.
+
 ```
 composer require limedeck/phpunit-detailed-printer --dev
 ```
