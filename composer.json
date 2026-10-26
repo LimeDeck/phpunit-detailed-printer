@@ -1,7 +1,7 @@
 {
     "name": "limedeck/phpunit-detailed-printer",
     "description": "Formatter for the detailed output of PHPUnit tests.",
-    "license": "ISC",
+    "license": "MIT",
     "authors": [
         {
             "name": "LimeDeck",
