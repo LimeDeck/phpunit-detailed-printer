@@ -1,5 +1,8 @@
 <?php
 
+use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\DataProvider;
+
 class PrinterNamesTest extends PHPUnit\Framework\TestCase
 {
     public function testItSupportsCamelCase()
@@ -12,13 +15,13 @@ class PrinterNamesTest extends PHPUnit\Framework\TestCase
         $this->assertTrue(true);
     }
 
-    /** @test */
+    #[Test]
     public function it_supports_snake_case()
     {
         $this->assertTrue(true);
     }
 
-    /** @test */
+    #[Test]
     public function itworkswithoutspacesaswell()
     {
         $this->assertTrue(true);
@@ -29,24 +32,19 @@ class PrinterNamesTest extends PHPUnit\Framework\TestCase
         $this->assertTrue(true);
     }
 
-    /**
-     * @test
-     * @dataProvider dataSetExamples
-     *
-     * @param mixed $a
-     * @param mixed $b
-     * @param mixed $expected
-     */
+    #[Test]
+    #[DataProvider('dataSetExamples')]
     public function itSupportsDataProvider($a, $b, $expected)
     {
         $this->assertTrue($expected);
     }
 
-    public function dataSetExamples()
+    public static function dataSetExamples()
     {
         return [
             ['a', 'b', true],
             [1, [1, 2], false],
+            'named' => ['a', 'b', true],
         ];
     }
 }

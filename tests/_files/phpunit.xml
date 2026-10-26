@@ -1,16 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<phpunit backupGlobals="false"
-         backupStaticAttributes="false"
-         colors="true"
-         convertErrorsToExceptions="true"
-         convertNoticesToExceptions="true"
-         convertWarningsToExceptions="true"
-         printerFile="../../src/Printer.php"
-         printerClass="LimeDeck\Testing\Printer"
-         processIsolation="false"
-         stopOnFailure="false"
-         bootstrap="../../vendor/autoload.php"
->
-
+<phpunit bootstrap="../../vendor/autoload.php"
+         colors="true">
+    <extensions>
+        <bootstrap class="LimeDeck\Testing\Extension"/>
+    </extensions>
 </phpunit>
