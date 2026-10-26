@@ -1,0 +1,20 @@
+[tools."http:php"]
+version = "8.3.36"
+
+[tools."http:php".platforms]
+macos-arm64 = { url = "https://dl.static-php.dev/v3/php-bin/common/php-{{ version }}-cli-macos-aarch64.tar.gz" }
+linux-x64 = { url = "https://dl.static-php.dev/v3/php-bin/common/php-{{ version }}-cli-linux-x86_64.tar.gz" }
+linux-arm64 = { url = "https://dl.static-php.dev/v3/php-bin/common/php-{{ version }}-cli-linux-aarch64.tar.gz" }
+windows-x64 = { url = "https://dl.static-php.dev/v3/php-bin/spc-max/php-{{ version }}-cli-win.zip" }
+
+[tools."http:composer"]
+version = "2.10.3"
+url = "https://getcomposer.org/download/{{ version }}/composer.phar"
+bin = "composer"
+windows_script_interpreter = "php"
+# Shared extraction keeps mise's temporary filenames within filesystem limits.
+shared_extraction = true
+
+[tasks]
+"cs:check" = "vendor/bin/php-cs-fixer fix --verbose --ansi --show-progress=dots --diff --dry-run"
+"cs:fix" = "vendor/bin/php-cs-fixer fix --verbose --ansi --show-progress=dots"
