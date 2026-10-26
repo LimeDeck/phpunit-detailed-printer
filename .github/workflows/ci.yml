@@ -10,13 +10,14 @@ permissions:
 
 jobs:
   tests:
-    name: PHPUnit ${{ matrix.phpunit }} on PHP ${{ matrix.php }} (${{ matrix.os || 'ubuntu-latest' }})
+    name: PHPUnit ${{ matrix.phpunit }} on PHP ${{ matrix.php }} (${{ matrix.os || 'ubuntu-latest' }})${{ matrix.lowest && ' lowest' || '' }}
     runs-on: ${{ matrix.os || 'ubuntu-latest' }}
     strategy:
       fail-fast: false
       matrix:
         include:
           - { phpunit: '10.5', php: '8.1' }
+          - { phpunit: '10.5', php: '8.1', lowest: true }
           - { phpunit: '10.5', php: '8.2' }
           - { phpunit: '10.5', php: '8.3' }
           - { phpunit: '10.5', php: '8.4' }
@@ -39,7 +40,7 @@ jobs:
           php-version: ${{ matrix.php }}
           coverage: none
 
-      - run: composer require "phpunit/phpunit:^${{ matrix.phpunit }}" -W --no-interaction --no-progress
+      - run: composer require "phpunit/phpunit:^${{ matrix.phpunit }}" -W ${{ matrix.lowest && '--prefer-lowest' || '' }} --no-interaction --no-progress
 
       - run: php vendor/bin/phpunit
 
@@ -56,6 +57,6 @@ jobs:
           php-version: '8.1'
           coverage: none
 
-      - run: composer update --no-interaction --no-progress
+      - run: composer install --no-interaction --no-progress
 
       - run: composer cs:check
