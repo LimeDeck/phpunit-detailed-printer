@@ -8,8 +8,7 @@ It turns the default PHPUnit output...
 
 ![detailed-printer](./screenshots/phpunit-pretty.png "PHPUnit output with this printer.")
 
-[![Build Status: Linux](https://travis-ci.org/LimeDeck/phpunit-detailed-printer.svg?branch=master)](https://travis-ci.org/LimeDeck/phpunit-detailed-printer)
-[![Build status: Windows](https://ci.appveyor.com/api/projects/status/656nmj6oxbnq4sri/branch/master?svg=true)](https://ci.appveyor.com/project/HRcc/phpunit-detailed-printer/branch/master)
+[![CI](https://github.com/LimeDeck/phpunit-detailed-printer/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/LimeDeck/phpunit-detailed-printer/actions/workflows/ci.yml)
 [![GitHub release](https://img.shields.io/github/release/LimeDeck/phpunit-detailed-printer.svg)](https://github.com/limedeck/phpunit-detailed-printer)
 
 ## Installation
@@ -20,27 +19,30 @@ composer require limedeck/phpunit-detailed-printer --dev
 
 ### PHPUnit version compatibility
 
- PHPUnit  | Package
-:---------|:----------
- 9.x.x    | 6.x.x
- 8.x.x    | 5.x.x
- 7.x.x    | 4.x.x
- 6.x.x    | 3.2.x
- 5.x.x    | 2.0.x
+ PHPUnit     | Package
+:------------|:----------
+ 10.x – 13.x | 7.x.x
+ 9.x.x       | 6.x.x
+ 8.x.x       | 5.x.x
+ 7.x.x       | 4.x.x
+ 6.x.x       | 3.2.x
+ 5.x.x       | 2.0.x
 
 
 ## Usage
 
-Set the printer class in `phpunit.xml`
+Register the extension in `phpunit.xml`
 
-```
+```xml
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit backupGlobals="false"
-         ...
-         printerClass="LimeDeck\Testing\Printer"
-         ...
-         >
+<phpunit ...>
+    <extensions>
+        <bootstrap class="LimeDeck\Testing\Extension"/>
+    </extensions>
+</phpunit>
 ```
+
+It replaces the progress dots and does nothing when progress output is off (`--no-output`, `--no-progress`, `--teamcity` or `--debug`).
 
 ## Tests
 To run the test suite, use `phpunit` command.

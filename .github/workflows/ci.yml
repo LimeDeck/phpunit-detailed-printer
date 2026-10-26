@@ -1,0 +1,62 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  tests:
+    name: PHPUnit ${{ matrix.phpunit }} on PHP ${{ matrix.php }} (${{ matrix.os || 'ubuntu-latest' }})${{ matrix.lowest && ' lowest' || '' }}
+    runs-on: ${{ matrix.os || 'ubuntu-latest' }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { phpunit: '10.5', php: '8.1' }
+          - { phpunit: '10.5', php: '8.1', lowest: true }
+          - { phpunit: '10.5', php: '8.2' }
+          - { phpunit: '10.5', php: '8.3' }
+          - { phpunit: '10.5', php: '8.4' }
+          - { phpunit: '11.5', php: '8.2' }
+          - { phpunit: '11.5', php: '8.3' }
+          - { phpunit: '11.5', php: '8.4' }
+          - { phpunit: '12.5', php: '8.3' }
+          - { phpunit: '12.5', php: '8.4' }
+          - { phpunit: '12.5', php: '8.5' }
+          - { phpunit: '13', php: '8.4' }
+          - { phpunit: '13', php: '8.5' }
+          - { phpunit: '13', php: '8.5', os: windows-latest }
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # 2.40.0
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: none
+
+      - run: composer require "phpunit/phpunit:^${{ matrix.phpunit }}" -W ${{ matrix.lowest && '--prefer-lowest' || '' }} --no-interaction --no-progress
+
+      - run: php vendor/bin/phpunit
+
+  cs:
+    name: Code style
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # 2.40.0
+        with:
+          php-version: '8.1'
+          coverage: none
+
+      - run: composer install --no-interaction --no-progress
+
+      - run: composer cs:check

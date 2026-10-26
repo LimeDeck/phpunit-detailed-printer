@@ -9,10 +9,11 @@
         }
     ],
     "require": {
+        "php": ">=8.1",
+        "phpunit/phpunit": "^10.5 || ^11.5 || ^12.5 || ^13.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "~9.0",
-        "friendsofphp/php-cs-fixer": "^2.14"
+        "friendsofphp/php-cs-fixer": "^3"
     },
     "autoload": {
         "psr-4": {
@@ -20,8 +21,8 @@
         }
     },
     "scripts": {
-      "cs:check": "vendor/bin/php-cs-fixer fix --verbose --ansi --show-progress=estimating --diff --dry-run",
-      "cs:fix": "vendor/bin/php-cs-fixer fix --verbose --ansi --show-progress=estimating"
+      "cs:check": "vendor/bin/php-cs-fixer fix --verbose --ansi --show-progress=dots --diff --dry-run",
+      "cs:fix": "vendor/bin/php-cs-fixer fix --verbose --ansi --show-progress=dots"
     },
     "minimum-stability": "stable"
 }

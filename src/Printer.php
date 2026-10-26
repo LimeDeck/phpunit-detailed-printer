@@ -2,220 +2,255 @@
 
 namespace LimeDeck\Testing;
 
-use PHPUnit\Framework\Test;
-use PHPUnit\Framework\Warning;
-use PHPUnit\Util\Test as UtilTest;
-use PHPUnit\TextUI\DefaultResultPrinter;
-use PHPUnit\Framework\AssertionFailedError;
+use PHPUnit\Event\Event;
+use PHPUnit\Event\Code\Test;
+use PHPUnit\Event\Test\Failed;
+use PHPUnit\Event\Test\Errored;
+use PHPUnit\Event\Test\Skipped;
+use PHPUnit\Event\Test\Finished;
+use PHPUnit\Event\Test\Prepared;
+use PHPUnit\Event\Tracer\Tracer;
+use PHPUnit\Event\Code\TestMethod;
+use PHPUnit\Event\Telemetry\HRTime;
+use PHPUnit\Event\Telemetry\Duration;
+use PHPUnit\Event\Code\TestCollection;
+use PHPUnit\Event\Test\ErrorTriggered;
+use PHPUnit\Event\TestSuite\TestSuite;
+use PHPUnit\Event\Test\ConsideredRisky;
+use PHPUnit\Event\Test\NoticeTriggered;
+use PHPUnit\Event\Test\MarkedIncomplete;
+use PHPUnit\Event\Test\WarningTriggered;
+use PHPUnit\TextUI\Configuration\Source;
+use PHPUnit\Event\Test\PhpNoticeTriggered;
+use PHPUnit\Event\Test\PreparationStarted;
+use PHPUnit\Event\Test\PhpWarningTriggered;
+use PHPUnit\Event\Test\DeprecationTriggered;
+use PHPUnit\Event\Test\PhpunitNoticeTriggered;
+use PHPUnit\Event\TestRunner\ExecutionStarted;
+use PHPUnit\Event\Test\PhpDeprecationTriggered;
+use PHPUnit\Event\Test\PhpunitWarningTriggered;
+use PHPUnit\Event\TestRunner\ExecutionFinished;
+use PHPUnit\Event\Test\BeforeFirstTestMethodFailed;
+use PHPUnit\Event\Test\PhpunitDeprecationTriggered;
+use PHPUnit\Event\Test\BeforeFirstTestMethodErrored;
+use PHPUnit\Event\TestSuite\Skipped as TestSuiteSkipped;
+use PHPUnit\Event\TestSuite\Started as TestSuiteStarted;
 
-class Printer extends DefaultResultPrinter
+final class Printer implements Tracer
 {
-    /**
-     * Replacement symbols for test statuses.
-     *
-     * @var array
-     */
-    protected static $symbols = [
-        'E' => "\e[31m!\e[0m", // red !
-        'F' => "\e[31m\xe2\x9c\x96\e[0m", // red X
-        'W' => "\e[33mW\e[0m", // yellow W
-        'I' => "\e[33mI\e[0m", // yellow I
-        'R' => "\e[33mR\e[0m", // yellow R
-        'S' => "\e[36mS\e[0m", // cyan S
-        '.' => "\e[32m\xe2\x9c\x94\e[0m", // green checkmark
-    ];
+    private int $total = 0;
+    private int $run   = 0;
+
+    private ?Test $current                = null;
+    private ?HRTime $startedAt            = null;
+    private bool $prepared                = false;
+    private Status $status                = Status::Passed;
+    private ?TestCollection $testsOfClass = null;
 
     /**
-     * Structure of the outputted test row.
-     *
-     * @var string
+     * @param resource $output
      */
-    protected $testRow = '';
+    public function __construct(
+        private $output,
+        private readonly bool $colors,
+        private readonly Source $source,
+    ) {
+    }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function writeProgress(string $progress): void
+    public function trace(Event $event): void
     {
-        $this->numTestsRun++;
+        match (true) {
+            $event instanceof ExecutionStarted             => $this->total = $event->testSuite()->count(),
+            $event instanceof TestSuiteStarted             => $this->testSuiteStarted($event->testSuite()),
+            $event instanceof TestSuiteSkipped             => $this->printUnstarted($event->testSuite()->tests(), Status::Skipped),
+            $event instanceof BeforeFirstTestMethodErrored => $this->printUnstartedTestsOfClass(Status::Errored),
+            $event instanceof BeforeFirstTestMethodFailed  => $this->printUnstartedTestsOfClass(Status::Failed),
+            $event instanceof PreparationStarted           => $this->start($event),
+            $event instanceof Prepared                     => $this->prepared = true,
+            $event instanceof Failed                       => $this->conclude($event, Status::Failed),
+            $event instanceof Errored                      => $this->conclude($event, Status::Errored),
+            $event instanceof Skipped                      => $this->conclude($event, Status::Skipped),
+            $event instanceof MarkedIncomplete             => $this->conclude($event, Status::Incomplete),
+            $event instanceof ConsideredRisky              => $this->raise($event->test(), Status::Risky),
+            $event instanceof ErrorTriggered               => $this->raiseIssue($event, Status::Errored, $this->source->ignoreSuppressionOfErrors()),
+            $event instanceof WarningTriggered             => $this->raiseIssue($event, Status::Warning, $this->source->ignoreSuppressionOfWarnings()),
+            $event instanceof PhpWarningTriggered          => $this->raiseIssue($event, Status::Warning, $this->source->ignoreSuppressionOfPhpWarnings()),
+            $event instanceof PhpunitWarningTriggered      => $this->raiseIssue($event, Status::Warning),
+            $event instanceof NoticeTriggered              => $this->raiseIssue($event, Status::Notice, $this->source->ignoreSuppressionOfNotices()),
+            $event instanceof PhpNoticeTriggered           => $this->raiseIssue($event, Status::Notice, $this->source->ignoreSuppressionOfPhpNotices()),
+            $event instanceof PhpunitNoticeTriggered       => $this->raiseIssue($event, Status::Notice),
+            $event instanceof DeprecationTriggered         => $this->raiseIssue($event, Status::Deprecation, $this->source->ignoreSuppressionOfDeprecations()),
+            $event instanceof PhpDeprecationTriggered      => $this->raiseIssue($event, Status::Deprecation, $this->source->ignoreSuppressionOfPhpDeprecations()),
+            $event instanceof PhpunitDeprecationTriggered  => $this->raiseIssue($event, Status::Deprecation),
+            $event instanceof Finished                     => $this->finish($event),
+            $event instanceof ExecutionFinished            => $this->separateFromSummary(),
+            default                                        => null,
+        };
+    }
 
-        if ($this->hasReplacementSymbol($progress)) {
-            $progress = static::$symbols[$progress];
+    private function testSuiteStarted(TestSuite $testSuite): void
+    {
+        if ($testSuite->isForTestClass()) {
+            $this->testsOfClass = $testSuite->tests();
+        }
+    }
+
+    /**
+     * A failing before-class method stops the whole class, so PHPUnit
+     * reports no per-test events for any of its tests.
+     */
+    private function printUnstartedTestsOfClass(Status $status): void
+    {
+        if ($this->testsOfClass !== null) {
+            $this->printUnstarted($this->testsOfClass, $status);
         }
 
-        $padding = str_pad($this->numTestsRun, strlen($this->numTests), ' ', STR_PAD_LEFT);
+        $this->testsOfClass = null;
+    }
 
-        $this->write("({$padding}/{$this->numTests}) {$progress} {$this->testRow}".PHP_EOL);
+    private function printUnstarted(TestCollection $tests, Status $status): void
+    {
+        foreach ($tests as $test) {
+            $this->printRow($test, $status, null);
+        }
+    }
+
+    private function start(PreparationStarted $event): void
+    {
+        $this->current   = $event->test();
+        $this->startedAt = $event->telemetryInfo()->time();
+        $this->prepared  = false;
+        $this->status    = Status::Passed;
     }
 
     /**
-     * {@inheritdoc}
+     * PHPUnit sends Finished only for prepared tests, so an outcome that
+     * arrives before Prepared is printed right away.
      */
-    public function addError(Test $test, \Throwable $e, float $time): void
+    private function conclude(Failed|Errored|Skipped|MarkedIncomplete $event, Status $status): void
     {
-        $this->buildTestRow(get_class($test), $test->getName(), $time, 'fg-red');
+        $test = $event->test();
 
-        parent::addError($test, $e, $time);
+        if (! $this->isCurrent($test)) {
+            $this->printRow($test, $status, null);
+
+            return;
+        }
+
+        if ($this->prepared) {
+            $this->status = $this->status->worst($status);
+
+            return;
+        }
+
+        $this->printRow($test, $status, $this->elapsed($event));
+
+        $this->current = null;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function addFailure(Test $test, AssertionFailedError $e, float $time): void
+    private function raise(Test $test, Status $status): void
     {
-        $this->buildTestRow(get_class($test), $test->getName(), $time, 'fg-red');
-
-        parent::addFailure($test, $e, $time);
+        if ($this->isCurrent($test)) {
+            $this->status = $this->status->worst($status);
+        }
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function addWarning(Test $test, Warning $e, float $time): void
-    {
-        $this->buildTestRow(get_class($test), $test->getName(), $time, 'fg-yellow');
+    private function raiseIssue(
+        ErrorTriggered|WarningTriggered|PhpWarningTriggered|PhpunitWarningTriggered|NoticeTriggered|PhpNoticeTriggered|PhpunitNoticeTriggered|DeprecationTriggered|PhpDeprecationTriggered|PhpunitDeprecationTriggered $issue,
+        Status $status,
+        bool $ignoreSuppression = true,
+    ): void {
+        if (! $ignoreSuppression && $issue->wasSuppressed()) {
+            return;
+        }
 
-        parent::addWarning($test, $e, $time);
+        foreach (['ignoredByBaseline', 'ignoredByTest', 'ignoredByFilter'] as $verdict) {
+            if (method_exists($issue, $verdict) && $issue->{$verdict}()) {
+                return;
+            }
+        }
+
+        $this->raise($issue->test(), $status);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function addIncompleteTest(Test $test, \Throwable $e, float $time): void
+    private function finish(Finished $event): void
     {
-        $this->buildTestRow(get_class($test), $test->getName(), $time, 'fg-yellow');
+        if (! $this->isCurrent($event->test())) {
+            return;
+        }
 
-        parent::addIncompleteTest($test, $e, $time);
+        $this->printRow($event->test(), $this->status, $this->elapsed($event));
+
+        $this->current = null;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function addRiskyTest(Test $test, \Throwable $e, float $time): void
+    private function separateFromSummary(): void
     {
-        $this->buildTestRow(get_class($test), $test->getName(), $time, 'fg-yellow');
-
-        parent::addRiskyTest($test, $e, $time);
+        if ($this->run > 0) {
+            fwrite($this->output, PHP_EOL);
+        }
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function addSkippedTest(Test $test, \Throwable $e, float $time): void
+    private function isCurrent(Test $test): bool
     {
-        $this->buildTestRow(get_class($test), $test->getName(), $time, 'fg-cyan');
-
-        parent::addSkippedTest($test, $e, $time);
+        return $this->current?->id() === $test->id();
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function endTest(Test $test, float $time): void
+    private function elapsed(Event $event): Duration
     {
-        $testName = UtilTest::describeAsString($test);
-
-        list($className, $methodName) = explode('::', $testName);
-
-        $this->buildTestRow($className, $methodName, $time);
-
-        parent::endTest($test, $time);
+        return $event->telemetryInfo()->time()->duration($this->startedAt);
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * We'll handle the coloring ourselves.
-     */
-    protected function writeProgressWithColor(string $color, string $buffer): void
+    private function printRow(Test $test, Status $status, ?Duration $duration): void
     {
-        $this->writeProgress($buffer);
-    }
+        ++$this->run;
 
-    /**
-     * Formats the results for a single test.
-     *
-     * @param $className
-     * @param $methodName
-     * @param $time
-     * @param $color
-     */
-    protected function buildTestRow($className, $methodName, $time, $color = 'fg-white')
-    {
-        $this->testRow = sprintf(
-            '%s (%s)',
-            $this->colorizeTextBox($color, "{$className}: {$this->formatMethodName($methodName)}"),
-            $this->formatTestDuration($time)
+        $row = sprintf(
+            '(%s/%d) %s %s',
+            str_pad((string) $this->run, strlen((string) $this->total), ' ', STR_PAD_LEFT),
+            $this->total,
+            $this->colors ? $this->colorize($status->color(), $status->symbol()) : $status->char(),
+            $this->colorize($status->nameColor(), $this->describe($test)),
         );
+
+        if ($duration !== null) {
+            $row .= sprintf(' (%s ms)', $this->formatDuration($duration));
+        }
+
+        fwrite($this->output, $row.PHP_EOL);
     }
 
-    /**
-     * Makes the method name more readable.
-     *
-     * @param $method
-     *
-     * @return mixed
-     */
-    protected function formatMethodName($method)
+    private function describe(Test $test): string
     {
-        return ucfirst(
-            $this->splitCamels(
-                $this->splitSnakes($method)
-            )
-        );
+        if (! $test instanceof TestMethod) {
+            return $test->name();
+        }
+
+        $method  = $test->methodName();
+        $variant = substr($test->name(), strlen($method));
+
+        return $test->className().': '.ucfirst($this->splitCamels($this->splitSnakes($method))).$variant;
     }
 
-    /**
-     * Replaces underscores in snake case with spaces.
-     *
-     * @param $name
-     *
-     * @return string
-     */
-    protected function splitSnakes($name)
+    private function splitSnakes(string $name): string
     {
         return str_replace('_', ' ', $name);
     }
 
-    /**
-     * Splits camel-cased names while handling caps sections properly.
-     *
-     * @param $name
-     *
-     * @return string
-     */
-    protected function splitCamels($name)
+    private function splitCamels(string $name): string
     {
-        return preg_replace('/(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])/', ' $1', $name);
+        return preg_replace('/(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])/', ' ', $name);
     }
 
-    /**
-     * Colours the duration if the test took longer than 500ms.
-     *
-     * @param $time
-     *
-     * @return string
-     */
-    protected function formatTestDuration($time)
+    private function formatDuration(Duration $duration): string
     {
-        $testDurationInMs = round($time * 1000);
+        $milliseconds = (int) round($duration->asFloat() * 1000);
 
-        $duration = $testDurationInMs > 500
-            ? $this->colorizeTextBox('fg-yellow', $testDurationInMs)
-            : $testDurationInMs;
-
-        return sprintf('%s ms', $duration);
+        return $milliseconds > 500 ? $this->colorize(Status::YELLOW, (string) $milliseconds) : (string) $milliseconds;
     }
 
-    /**
-     * Verifies if we have a replacement symbol available.
-     *
-     * @param $progress
-     *
-     * @return bool
-     */
-    protected function hasReplacementSymbol($progress)
+    private function colorize(int $color, string $text): string
     {
-        return $this->colors && in_array($progress, array_keys(static::$symbols));
+        return $this->colors ? "\e[{$color}m{$text}\e[0m" : $text;
     }
 }

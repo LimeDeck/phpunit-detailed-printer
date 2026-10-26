@@ -12,9 +12,12 @@ $_SERVER['argv'][7] = dirname(__FILE__).'/_files/PrinterStatesTest.php';
 
 require_once(dirname(dirname(__FILE__))).'/vendor/autoload.php';
 
-PHPUnit\TextUI\Command::main();
+(new PHPUnit\TextUI\Application)->run($_SERVER['argv']);
 ?>
 --EXPECTF--
 PHPUnit %s by Sebastian Bergmann and contributors.
+
+Runtime:       PHP %s
+Configuration: %s
 
 [30;43mNo tests executed![0m
